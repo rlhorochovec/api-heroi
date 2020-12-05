@@ -1,12 +1,13 @@
 package br.rafaelhorochovec.heroi.controller;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,10 +30,10 @@ public class HeroiController {
 	private HeroiRepository heroiRepository;
 
 	@GetMapping("/herois")
-	public List<Heroi> getAllHerois() {
-		return heroiRepository.findAll();
+	public Page<Heroi> getAllHerois(Pageable pageable) {
+		return heroiRepository.findAll(pageable);
 	}
-
+	
 	@GetMapping("/herois/{id}")
 	public ResponseEntity<Heroi> getHeroiById(@PathVariable(value = "id") Long heroiId)
 			throws ResourceNotFoundException {

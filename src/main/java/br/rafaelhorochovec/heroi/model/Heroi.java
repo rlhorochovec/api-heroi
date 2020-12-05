@@ -6,8 +6,13 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 
 @Entity
-public class Heroi {
+public class Heroi extends Auditoria {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	@Id
 	@GeneratedValue(generator = "heroi_gen")
 	@SequenceGenerator(name = "heroi_gen", sequenceName = "heroi_seq", initialValue = 1)
