@@ -2,8 +2,8 @@ package br.rafaelhorochovec.heroi.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
 
 @Entity
 public class Heroi extends Auditoria {
@@ -14,8 +14,7 @@ public class Heroi extends Auditoria {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@GeneratedValue(generator = "heroi_gen")
-	@SequenceGenerator(name = "heroi_gen", sequenceName = "heroi_seq", initialValue = 1)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String nome;
 	private String nomeCivil;
