@@ -2,6 +2,7 @@ package br.rafaelhorochovec.heroi.controller;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.validation.Valid;
 
@@ -35,7 +36,7 @@ public class HeroiController {
 	}
 	
 	@GetMapping("/herois/{id}")
-	public ResponseEntity<Heroi> getHeroiById(@PathVariable(value = "id") Long heroiId)
+	public ResponseEntity<Heroi> getHeroiById(@PathVariable(value = "id") UUID heroiId)
 			throws ResourceNotFoundException {
 		Heroi heroi = heroiRepository.findById(heroiId)
 				.orElseThrow(() -> new ResourceNotFoundException("Não existe herói com o id: " + heroiId));
@@ -48,7 +49,7 @@ public class HeroiController {
 	}
 
 	@PutMapping("/herois/{id}")
-	public ResponseEntity<Heroi> updateHeroi(@PathVariable(value = "id") Long heroiId,
+	public ResponseEntity<Heroi> updateHeroi(@PathVariable(value = "id") UUID heroiId,
 			@Valid @RequestBody Heroi heroiRequest) throws ResourceNotFoundException {
 		Heroi heroi = heroiRepository.findById(heroiId)
 				.orElseThrow(() -> new ResourceNotFoundException("Não existe herói com o id: " + heroiId));
@@ -60,7 +61,7 @@ public class HeroiController {
 	}
 
 	@DeleteMapping("/herois/{id}")
-	public Map<String, Boolean> deleteHeroi(@PathVariable(value = "id") Long heroiId) throws ResourceNotFoundException {
+	public Map<String, Boolean> deleteHeroi(@PathVariable(value = "id") UUID heroiId) throws ResourceNotFoundException {
 		Heroi heroi = heroiRepository.findById(heroiId)
 				.orElseThrow(() -> new ResourceNotFoundException("Não existe herói com o id: " + heroiId));
 
