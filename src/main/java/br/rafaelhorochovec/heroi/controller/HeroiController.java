@@ -1,6 +1,7 @@
 package br.rafaelhorochovec.heroi.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -9,6 +10,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,8 +33,14 @@ public class HeroiController {
 	private HeroiRepository heroiRepository;
 
 	@GetMapping("/herois")
-	public Page<Heroi> getAllHerois(Pageable pageable) {
+	public Page<Heroi> getHerois(Pageable pageable) {
 		return heroiRepository.findAll(pageable);
+	}
+	
+	@GetMapping("/herois/all")
+	public ResponseEntity<List<Heroi>> getAllHerois() {
+		List<Heroi> herois = heroiRepository.findAll();
+		return new ResponseEntity<>(herois, HttpStatus.OK);
 	}
 	
 	@GetMapping("/herois/{id}")
