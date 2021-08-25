@@ -81,7 +81,7 @@ public class HeroiController {
 		return response;
 	}
 	
-	@DeleteMapping("/delete/all")
+	@DeleteMapping("/herois/delete/all")
 	public ResponseEntity<HttpStatus> deleteHerois() {
 		try {
 			heroiRepository.deleteAll();
