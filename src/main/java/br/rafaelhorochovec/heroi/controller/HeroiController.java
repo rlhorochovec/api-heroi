@@ -80,4 +80,14 @@ public class HeroiController {
 		response.put("deleted", Boolean.TRUE);
 		return response;
 	}
+	
+	@DeleteMapping("/delete/all")
+	public ResponseEntity<HttpStatus> deleteHerois() {
+		try {
+			heroiRepository.deleteAll();
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 }
