@@ -18,7 +18,7 @@ public class Heroi extends Auditoria {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@GenericGenerator(name = "uuid2", strategy = "uuid2")
 	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "uuid2")
@@ -28,6 +28,16 @@ public class Heroi extends Auditoria {
 	private String nome;
 	private String nomeCivil;
 	private String universo;
+
+	public Heroi(String nome, String nomeCivil, String universo) {
+		this.nome = nome;
+		this.nomeCivil = nomeCivil;
+		this.universo = universo;
+	}
+
+	public Heroi() {
+
+	}
 
 	public UUID getId() {
 		return id;
@@ -59,5 +69,10 @@ public class Heroi extends Auditoria {
 
 	public void setUniverso(String universo) {
 		this.universo = universo;
+	}
+
+	@Override
+	public String toString() {
+		return "Heroi [id=" + id + ", nome=" + nome + ", nomeCivil=" + nomeCivil + ", universo=" + universo + "]";
 	}
 }
