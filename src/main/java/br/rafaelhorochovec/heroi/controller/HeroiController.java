@@ -38,7 +38,7 @@ public class HeroiController {
 	private HeroiRepository heroiRepository;
 
 	@GetMapping("/herois")
-	public ResponseEntity<Map<String, Object>> getHerois(@RequestParam(required = false) String nome,
+	public ResponseEntity<Map<String, Object>> read(@RequestParam(required = false) String nome,
 			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size) {
 
 		try {
@@ -65,14 +65,14 @@ public class HeroiController {
 		}
 	}
 
-	@GetMapping("/herois/all")
-	public ResponseEntity<List<Heroi>> getAllHerois() {
+	@GetMapping("/herois/lista")
+	public ResponseEntity<List<Heroi>> readAll() {
 		List<Heroi> herois = heroiRepository.findAll();
 		return new ResponseEntity<>(herois, HttpStatus.OK);
 	}
 
 	@GetMapping("/herois/{id}")
-	public ResponseEntity<Heroi> getHeroiById(@PathVariable(value = "id") UUID heroiId)
+	public ResponseEntity<Heroi> getById(@PathVariable(value = "id") UUID heroiId)
 			throws ResourceNotFoundException {
 		Heroi heroi = heroiRepository.findById(heroiId)
 				.orElseThrow(() -> new ResourceNotFoundException("Não existe herói com o id: " + heroiId));
@@ -80,12 +80,18 @@ public class HeroiController {
 	}
 
 	@PostMapping("/herois")
-	public Heroi createHeroi(@Valid @RequestBody Heroi heroi) {
-		return heroiRepository.save(heroi);
+	public ResponseEntity<Heroi> create(@Valid @RequestBody Heroi heroi) {
+		try {
+			Heroi _heroi = heroiRepository
+					.save(new Heroi(heroi.getNome(), heroi.getNomeCivil(), heroi.getUniverso()));
+			return new ResponseEntity<>(_heroi, HttpStatus.CREATED);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 
 	@PutMapping("/herois/{id}")
-	public ResponseEntity<Heroi> updateHeroi(@PathVariable(value = "id") UUID heroiId,
+	public ResponseEntity<Heroi> update(@PathVariable(value = "id") UUID heroiId,
 			@Valid @RequestBody Heroi heroiRequest) throws ResourceNotFoundException {
 		Heroi heroi = heroiRepository.findById(heroiId)
 				.orElseThrow(() -> new ResourceNotFoundException("Não existe herói com o id: " + heroiId));
@@ -97,7 +103,7 @@ public class HeroiController {
 	}
 
 	@DeleteMapping("/herois/{id}")
-	public Map<String, Boolean> deleteHeroi(@PathVariable(value = "id") UUID heroiId) throws ResourceNotFoundException {
+	public Map<String, Boolean> delete(@PathVariable(value = "id") UUID heroiId) throws ResourceNotFoundException {
 		Heroi heroi = heroiRepository.findById(heroiId)
 				.orElseThrow(() -> new ResourceNotFoundException("Não existe herói com o id: " + heroiId));
 
@@ -107,8 +113,8 @@ public class HeroiController {
 		return response;
 	}
 
-	@DeleteMapping("/herois/delete/all")
-	public ResponseEntity<HttpStatus> deleteHerois() {
+	@DeleteMapping("/herois")
+	public ResponseEntity<HttpStatus> deleteAll() {
 		try {
 			heroiRepository.deleteAll();
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
