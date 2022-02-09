@@ -1,6 +1,10 @@
 # api-heroi
 
-https://heroi-api.herokuapp.com/api
+This project was generated with [Spring Boot](https://spring.io/projects/spring-boot) version 2.2.7.RELEASE.
+
+## API Endpoint
+
+https://heroi-api.herokuapp.com
 
 Método | URL | Ações | 
 --- | --- | --- | 
