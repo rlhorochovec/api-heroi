@@ -1,4 +1,4 @@
-package br.rafaelhorochovec.heroi.repository;
+package br.rafaelhorochovec.heroes.repository;
 
 import java.util.UUID;
 
@@ -7,9 +7,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import br.rafaelhorochovec.heroi.model.Heroi;
+import br.rafaelhorochovec.heroes.model.Hero;
 
 @Repository
-public interface HeroiRepository extends JpaRepository<Heroi, UUID> {
-	Page<Heroi> findByNomeContaining(String nome, Pageable pageable);
+public interface HeroRepository extends JpaRepository<Hero, UUID> {
+	Page<Hero> findByNameContaining(String name, Pageable pageable);
 }

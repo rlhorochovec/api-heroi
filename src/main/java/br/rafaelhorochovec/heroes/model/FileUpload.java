@@ -1,4 +1,4 @@
-package br.rafaelhorochovec.heroi.model;
+package br.rafaelhorochovec.heroes.model;
 
 import java.util.UUID;
 
@@ -13,7 +13,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
 @Entity
-public class FileUpload extends Auditoria {
+public class FileUpload extends Audit {
 	
 	/**
 	 * 

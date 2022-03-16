@@ -1,4 +1,4 @@
-package br.rafaelhorochovec.heroi.model;
+package br.rafaelhorochovec.heroes.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.data.annotation.CreatedDate;
@@ -11,7 +11,7 @@ import java.util.Date;
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 @JsonIgnoreProperties(value = { "createdAt", "updatedAt" }, allowGetters = true)
-public abstract class Auditoria implements Serializable {
+public abstract class Audit implements Serializable {
 	/**
 	 * 
 	 */

@@ -1,4 +1,4 @@
-package br.rafaelhorochovec.heroi.property;
+package br.rafaelhorochovec.heroes.property;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

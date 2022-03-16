@@ -1,4 +1,4 @@
-package br.rafaelhorochovec.heroi.exception;
+package br.rafaelhorochovec.heroes.exception;
 
 public class FileStorageException extends RuntimeException {
 

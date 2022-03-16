@@ -1,4 +1,4 @@
-package br.rafaelhorochovec.heroi.service;
+package br.rafaelhorochovec.heroes.service;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -17,12 +17,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import br.rafaelhorochovec.heroi.exception.FileStorageException;
-import br.rafaelhorochovec.heroi.exception.MyFileNotFoundException;
-import br.rafaelhorochovec.heroi.model.FileUpload;
-import br.rafaelhorochovec.heroi.property.FileStorageProperties;
-import br.rafaelhorochovec.heroi.repository.FileUploadRepository;
-import br.rafaelhorochovec.heroi.util.Thumbnail;
+import br.rafaelhorochovec.heroes.exception.FileStorageException;
+import br.rafaelhorochovec.heroes.exception.MyFileNotFoundException;
+import br.rafaelhorochovec.heroes.model.FileUpload;
+import br.rafaelhorochovec.heroes.property.FileStorageProperties;
+import br.rafaelhorochovec.heroes.repository.FileUploadRepository;
+import br.rafaelhorochovec.heroes.util.Thumbnail;
 
 @Service
 public class FileStorageService {
