@@ -1,4 +1,4 @@
-package br.rafaelhorochovec.heroi.util;
+package br.rafaelhorochovec.heroes.util;
 
 import java.awt.Graphics2D;
 import java.awt.Image;

@@ -1,4 +1,4 @@
-package br.rafaelhorochovec.heroi.model;
+package br.rafaelhorochovec.heroes.model;
 
 import java.util.UUID;
 
@@ -12,7 +12,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
 @Entity
-public class Heroi extends Auditoria {
+public class Hero extends Audit {
 
 	/**
 	 * 
@@ -25,17 +25,17 @@ public class Heroi extends Auditoria {
 	@Column(length = 36, nullable = false, updatable = false)
 	@Type(type = "pg-uuid")
 	private UUID id;
-	private String nome;
-	private String nomeCivil;
-	private String universo;
+	private String name;
+	private String civil;
+	private String universe;
 
-	public Heroi(String nome, String nomeCivil, String universo) {
-		this.nome = nome;
-		this.nomeCivil = nomeCivil;
-		this.universo = universo;
+	public Hero(String name, String civil, String universe) {
+		this.name = name;
+		this.civil = civil;
+		this.universe = universe;
 	}
 
-	public Heroi() {
+	public Hero() {
 
 	}
 
@@ -47,32 +47,32 @@ public class Heroi extends Auditoria {
 		this.id = id;
 	}
 
-	public String getNome() {
-		return nome;
+	public String getName() {
+		return name;
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public String getNomeCivil() {
-		return nomeCivil;
+	public String getCivil() {
+		return civil;
 	}
 
-	public void setNomeCivil(String nomeCivil) {
-		this.nomeCivil = nomeCivil;
+	public void setCivil(String civil) {
+		this.civil = civil;
 	}
 
-	public String getUniverso() {
-		return universo;
+	public String getUniverse() {
+		return universe;
 	}
 
-	public void setUniverso(String universo) {
-		this.universo = universo;
+	public void setUniverse(String universe) {
+		this.universe = universe;
 	}
 
 	@Override
 	public String toString() {
-		return "Heroi [id=" + id + ", nome=" + nome + ", nomeCivil=" + nomeCivil + ", universo=" + universo + "]";
+		return "Hero [id=" + id + ", name=" + name + ", civil=" + civil + ", universe=" + universe + "]";
 	}
 }

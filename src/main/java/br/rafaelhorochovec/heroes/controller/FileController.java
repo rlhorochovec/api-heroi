@@ -1,4 +1,4 @@
-package br.rafaelhorochovec.heroi.controller;
+package br.rafaelhorochovec.heroes.controller;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -21,9 +21,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import br.rafaelhorochovec.heroi.model.FileUpload;
-import br.rafaelhorochovec.heroi.response.UploadFileResponse;
-import br.rafaelhorochovec.heroi.service.FileStorageService;
+import br.rafaelhorochovec.heroes.model.FileUpload;
+import br.rafaelhorochovec.heroes.response.UploadFileResponse;
+import br.rafaelhorochovec.heroes.service.FileStorageService;
 
 @RestController
 @RequestMapping("/api")
@@ -32,23 +32,23 @@ public class FileController {
 	@Autowired
 	private FileStorageService fileStorageService;
 
-	@PostMapping("/herois/upload")
+	@PostMapping("/heroes/upload")
 	public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file) {
 
 		FileUpload newFile = fileStorageService.storeFile(file);
 
-		String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/herois/view/")
+		String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/heroes/view/")
 				.path(newFile.getName()).toUriString();
 
 		return new UploadFileResponse(newFile.getName(), fileDownloadUri, file.getContentType(), file.getSize());
 	}
 
-	@PostMapping("/herois/multiple")
+	@PostMapping("/heroes/multiple")
 	public List<UploadFileResponse> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
 		return Arrays.asList(files).stream().map(file -> uploadFile(file)).collect(Collectors.toList());
 	}
 
-	@GetMapping("/herois/view/{fileName:.+}")
+	@GetMapping("/heroes/view/{fileName:.+}")
 	public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) {
 
 		// Load file as Resource

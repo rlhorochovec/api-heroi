@@ -1,4 +1,4 @@
-package br.rafaelhorochovec.heroi.response;
+package br.rafaelhorochovec.heroes.response;
 
 public class UploadFileResponse {
 	private String name;
