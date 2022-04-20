@@ -1,5 +1,6 @@
 package br.rafaelhorochovec.heroes.model;
 
+import java.util.Arrays;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -12,13 +13,10 @@ import javax.persistence.Lob;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
-public class FileUpload extends Audit {
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+public class FileUpload {
 	
 	@Id
 	@GenericGenerator(name = "uuid2", strategy = "uuid2")
@@ -30,6 +28,7 @@ public class FileUpload extends Audit {
     private String name;
     private String type;
 
+    @JsonIgnore
     @Lob
     private byte[] data;
 
@@ -73,5 +72,10 @@ public class FileUpload extends Audit {
 
 	public void setData(byte[] data) {
 		this.data = data;
+	}
+
+	@Override
+	public String toString() {
+		return "FileUpload [id=" + id + ", name=" + name + ", type=" + type + ", data=" + Arrays.toString(data) + "]";
 	}
 }
