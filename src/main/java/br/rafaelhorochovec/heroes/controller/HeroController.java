@@ -87,13 +87,14 @@ public class HeroController {
 
 	@RequestMapping(value = "/heroes", method = RequestMethod.POST, produces = "application/json", consumes = "multipart/form-data")
 	public ResponseEntity<Hero> create(@RequestPart Hero hero, @RequestPart MultipartFile image) {
+		String fileDownloadUri = null;
 		try {
-			FileUpload newFile = fileStorageService.storeFile(image);
-
-			String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/heroes/view/")
-					.path(newFile.getName()).toUriString();
-
-			hero.setImage(newFile);
+			if(!image.isEmpty()) {
+				FileUpload newFile = fileStorageService.storeFile(image);
+				fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/heroes/view/")
+						.path(newFile.getName()).toUriString();
+				hero.setImage(newFile);
+			}
 
 			Hero _hero = heroRepository.save(
 					new Hero(hero.getName(), hero.getCivil(), hero.getUniverse(), hero.getImage(), fileDownloadUri));
@@ -109,16 +110,18 @@ public class HeroController {
 		Hero hero = heroRepository.findById(heroId)
 				.orElseThrow(() -> new ResourceNotFoundException("Não existe herói com o id: " + heroId));
 
-		FileUpload newFile = fileStorageService.storeFile(image);
-
-		String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/heroes/view/")
-				.path(newFile.getName()).toUriString();
-
+		if(!image.isEmpty()) {
+			FileUpload newFile = fileStorageService.storeFile(image);
+			String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/heroes/view/")
+					.path(newFile.getName()).toUriString();
+			hero.setImage(newFile);
+			hero.setImagePath(fileDownloadUri);
+		}
+		
 		hero.setName(heroRequest.getName());
 		hero.setCivil(heroRequest.getCivil());
 		hero.setUniverse(heroRequest.getUniverse());
-		hero.setImage(newFile);
-		hero.setImagePath(fileDownloadUri);
+		
 		final Hero updatedHero = heroRepository.save(hero);
 		return ResponseEntity.ok(updatedHero);
 	}
