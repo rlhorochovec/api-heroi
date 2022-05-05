@@ -111,6 +111,7 @@ public class HeroController {
 				.orElseThrow(() -> new ResourceNotFoundException("Não existe herói com o id: " + heroId));
 
 		if(!image.isEmpty()) {
+			fileStorageService.deleteFileAsResource(hero.getImage().getName());
 			FileUpload newFile = fileStorageService.storeFile(image);
 			String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/heroes/view/")
 					.path(newFile.getName()).toUriString();
@@ -132,6 +133,7 @@ public class HeroController {
 				.orElseThrow(() -> new ResourceNotFoundException("Não existe herói com o id: " + heroId));
 
 		heroRepository.delete(hero);
+		fileStorageService.deleteFileAsResource(hero.getImage().getName());
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("deleted", Boolean.TRUE);
 		return response;
@@ -141,6 +143,7 @@ public class HeroController {
 	public ResponseEntity<HttpStatus> deleteAll() {
 		try {
 			heroRepository.deleteAll();
+			fileStorageService.deleteAllFiles();
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
