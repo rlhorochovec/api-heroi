@@ -1,9 +1,12 @@
 package br.rafaelhorochovec.heroes.service;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.nio.file.DirectoryNotEmptyException;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
@@ -98,5 +101,25 @@ public class FileStorageService {
 		} catch (MalformedURLException ex) {
 			throw new MyFileNotFoundException("File not found " + fileName, ex);
 		}
+	}
+
+	public void deleteFileAsResource(String fileName) {
+		Path filePath = this.fileStorageLocation.resolve(fileName).normalize();
+		try {
+			// Delete file or directory
+			Files.delete(filePath);
+			System.out.println("File or directory deleted successfully");
+		} catch (NoSuchFileException ex) {
+			System.out.printf("No such file or directory: %s\n", fileName);
+		} catch (DirectoryNotEmptyException ex) {
+			System.out.printf("Directory %s is not empty\n", fileName);
+		} catch (IOException ex) {
+			System.out.println(ex);
+		}
+	}
+
+	public void deleteAllFiles() throws IOException {
+		final Path root = Paths.get("uploads");
+		Files.walk(root).filter(Files::isRegularFile).map(Path::toFile).forEach(File::delete);
 	}
 }

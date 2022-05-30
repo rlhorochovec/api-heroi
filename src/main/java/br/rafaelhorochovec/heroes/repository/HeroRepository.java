@@ -1,5 +1,6 @@
 package br.rafaelhorochovec.heroes.repository;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
@@ -12,4 +13,5 @@ import br.rafaelhorochovec.heroes.model.Hero;
 @Repository
 public interface HeroRepository extends JpaRepository<Hero, UUID> {
 	Page<Hero> findByNameContaining(String name, Pageable pageable);
+	List<Hero> findByOrderByNameAsc();
 }
