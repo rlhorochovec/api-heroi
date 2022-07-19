@@ -13,5 +13,6 @@ import br.rafaelhorochovec.heroes.model.Hero;
 @Repository
 public interface HeroRepository extends JpaRepository<Hero, UUID> {
 	Page<Hero> findByNameContaining(String name, Pageable pageable);
+
 	List<Hero> findByOrderByNameAsc();
 }

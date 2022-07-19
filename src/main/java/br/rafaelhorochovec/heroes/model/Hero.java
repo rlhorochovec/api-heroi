@@ -2,13 +2,11 @@ package br.rafaelhorochovec.heroes.model;
 
 import java.util.UUID;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
@@ -30,13 +28,10 @@ public class Hero extends Audit {
 	private String name;
 	private String civil;
 	private String universe;
-	
-	@OneToOne(cascade = CascadeType.ALL)
-	private FileUpload image;
-	
+	private String image;
 	private String imagePath;
 
-	public Hero(String name, String civil, String universe, FileUpload image, String imagePath) {
+	public Hero(String name, String civil, String universe, String image, String imagePath) {
 		this.name = name;
 		this.civil = civil;
 		this.universe = universe;
@@ -80,11 +75,11 @@ public class Hero extends Audit {
 		this.universe = universe;
 	}
 
-	public FileUpload getImage() {
+	public String getImage() {
 		return image;
 	}
 
-	public void setImage(FileUpload image) {
+	public void setImage(String image) {
 		this.image = image;
 	}
 
