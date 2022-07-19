@@ -58,7 +58,7 @@ public class FilesStorageServiceImpl implements FilesStorageService {
 			// Rename file
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmssSSS");
 			fileName = "img_" + sdf.format(new Date()) + fileExtension;
-			fileUrl = ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/heroes/view/").path(fileName)
+			fileUrl = ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/heroes/files/").path(fileName)
 					.toUriString();
 
 			// Copy file to the target location (Replacing existing file with the same name)
