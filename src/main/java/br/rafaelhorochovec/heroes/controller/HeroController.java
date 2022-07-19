@@ -24,13 +24,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.rafaelhorochovec.heroes.exception.ResourceNotFoundException;
-import br.rafaelhorochovec.heroes.model.FileUpload;
+import br.rafaelhorochovec.heroes.model.FileInfo;
 import br.rafaelhorochovec.heroes.model.Hero;
 import br.rafaelhorochovec.heroes.repository.HeroRepository;
-import br.rafaelhorochovec.heroes.service.FileStorageService;
+import br.rafaelhorochovec.heroes.service.FilesStorageService;
 
 @Transactional
 @CrossOrigin
@@ -42,7 +41,7 @@ public class HeroController {
 	private HeroRepository heroRepository;
 
 	@Autowired
-	private FileStorageService fileStorageService;
+	private FilesStorageService storageService;
 
 	@GetMapping("/heroes")
 	public ResponseEntity<Map<String, Object>> read(@RequestParam(required = false) String name,
@@ -81,23 +80,22 @@ public class HeroController {
 	@GetMapping("/heroes/{id}")
 	public ResponseEntity<Hero> getById(@PathVariable(value = "id") UUID heroId) throws ResourceNotFoundException {
 		Hero hero = heroRepository.findById(heroId)
-				.orElseThrow(() -> new ResourceNotFoundException("Não existe herói com o id: " + heroId));
+				.orElseThrow(() -> new ResourceNotFoundException("Hero ID NOT FOUND:  " + heroId));
 		return ResponseEntity.ok().body(hero);
 	}
 
 	@RequestMapping(value = "/heroes", method = RequestMethod.POST, produces = "application/json", consumes = "multipart/form-data")
-	public ResponseEntity<Hero> create(@RequestPart Hero hero, @RequestPart MultipartFile image) {
-		String fileDownloadUri = null;
+	public ResponseEntity<Hero> create(@RequestPart Hero hero, @RequestPart MultipartFile file) {
 		try {
-			if(!image.isEmpty()) {
-				FileUpload newFile = fileStorageService.storeFile(image);
-				fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/heroes/view/")
-						.path(newFile.getName()).toUriString();
-				hero.setImage(newFile);
+			if (!file.isEmpty()) {
+				FileInfo fileUpload = storageService.save(file);
+				hero.setImage(fileUpload.getName());
+				hero.setImagePath(fileUpload.getUrl());
 			}
 
-			Hero _hero = heroRepository.save(
-					new Hero(hero.getName(), hero.getCivil(), hero.getUniverse(), hero.getImage(), fileDownloadUri));
+			Hero _hero = heroRepository
+					.save(new Hero(hero.getName(), hero.getCivil(), hero.getUniverse(), hero.getImage(), hero.getImagePath()));
+
 			return new ResponseEntity<>(_hero, HttpStatus.CREATED);
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -106,23 +104,20 @@ public class HeroController {
 
 	@RequestMapping(value = "/heroes/{id}", method = RequestMethod.PUT, produces = "application/json", consumes = "multipart/form-data")
 	public ResponseEntity<Hero> update(@PathVariable(value = "id") UUID heroId, @RequestPart Hero heroRequest,
-			@RequestPart MultipartFile image) throws ResourceNotFoundException {
+			@RequestPart MultipartFile file) throws ResourceNotFoundException {
 		Hero hero = heroRepository.findById(heroId)
-				.orElseThrow(() -> new ResourceNotFoundException("Não existe herói com o id: " + heroId));
+				.orElseThrow(() -> new ResourceNotFoundException("Hero ID NOT FOUND:  " + heroId));
 
-		if(!image.isEmpty()) {
-			fileStorageService.deleteFileAsResource(hero.getImage().getName());
-			FileUpload newFile = fileStorageService.storeFile(image);
-			String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/heroes/view/")
-					.path(newFile.getName()).toUriString();
-			hero.setImage(newFile);
-			hero.setImagePath(fileDownloadUri);
+		if (!file.isEmpty()) {
+			FileInfo fileUpload = storageService.save(file);
+			hero.setImage(fileUpload.getName());
+			hero.setImagePath(fileUpload.getUrl());
 		}
-		
+
 		hero.setName(heroRequest.getName());
 		hero.setCivil(heroRequest.getCivil());
 		hero.setUniverse(heroRequest.getUniverse());
-		
+
 		final Hero updatedHero = heroRepository.save(hero);
 		return ResponseEntity.ok(updatedHero);
 	}
@@ -130,10 +125,9 @@ public class HeroController {
 	@DeleteMapping("/heroes/{id}")
 	public Map<String, Boolean> delete(@PathVariable(value = "id") UUID heroId) throws ResourceNotFoundException {
 		Hero hero = heroRepository.findById(heroId)
-				.orElseThrow(() -> new ResourceNotFoundException("Não existe herói com o id: " + heroId));
+				.orElseThrow(() -> new ResourceNotFoundException("Hero ID NOT FOUND:  " + heroId));
 
 		heroRepository.delete(hero);
-		fileStorageService.deleteFileAsResource(hero.getImage().getName());
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("deleted", Boolean.TRUE);
 		return response;
@@ -143,7 +137,7 @@ public class HeroController {
 	public ResponseEntity<HttpStatus> deleteAll() {
 		try {
 			heroRepository.deleteAll();
-			fileStorageService.deleteAllFiles();
+			storageService.deleteAll();
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

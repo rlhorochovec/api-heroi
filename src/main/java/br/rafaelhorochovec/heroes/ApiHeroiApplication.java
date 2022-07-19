@@ -15,5 +15,4 @@ public class ApiHeroiApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ApiHeroiApplication.class, args);
 	}
-
 }
